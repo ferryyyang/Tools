@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Shapes and Symbols</title>
+    <link rel="stylesheet" type="text/css" href="http://serverapi.arcgisonline.com/jsapi/arcgis/2.6/js/dojo/dijit/themes/claro/claro.css">
+    <script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.6"></script>
+	
+	<script type="text/javascript" src ="../lib/FileSaveTools.js"></script>
+	<!--<script type="text/javascript" src="../lib/jDataView_write.js"></script>-->
+	<script type="text/javascript" src="../src/JS2Shapefile.js"></script>
+
+    <script type="text/javascript">
+      dojo.require("esri.map");
+      dojo.require("esri.layers.agstiled");
+      dojo.require("esri.toolbars.draw");
+
+      var map, tb;
+      function init() {
+        var initExtent = new esri.geometry.Extent({"xmin":-12836528.782095946,"ymin":-939258.2035679615,"xmax":7200979.560687953,"ymax":9079495.967823988,"spatialReference":{"wkid":102100}});
+        map = new esri.Map("map",{extent:initExtent});
+        dojo.connect(map, "onLoad", initToolbar);
+
+        map.addLayer(new esri.layers.ArcGISTiledMapServiceLayer("http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer"));
+
+      }
+
+      function initToolbar(map) {
+        tb = new esri.toolbars.Draw(map);
+        dojo.connect(tb, "onDrawEnd", addGraphic);
+      }
+
+      function addGraphic(geometry) {
+          var type = geometry.type;
+		  var symbol;
+          if (type === "point" || type === "multipoint") {
+            symbol = tb.markerSymbol;
+          }
+          else if (type === "line" || type === "polyline") {
+            symbol = tb.lineSymbol;
+          }
+          else {
+            symbol = tb.fillSymbol;
+          }
+        map.graphics.add(new esri.Graphic(geometry, symbol));
+      }
+	  
+	  function exportShapefiles(){
+	  	var shapewriter = new Shapefile();
+		shapewriter.addESRIGraphics (map.graphics.graphics);
+		var outputObject = {
+			points: shapewriter.getShapefile("POINT"),
+			lines: shapewriter.getShapefile("POLYLINE"),
+			polygons: shapewriter.getShapefile("POLYGON")
+		}
+		var saver = new BinaryHelper();
+		var anythingToDo = false;
+		for (var shapefiletype in outputObject){
+			if (outputObject.hasOwnProperty(shapefiletype)){
+				if (outputObject[shapefiletype]['successful']){
+					anythingToDo = true;
+					for (actualfile in outputObject[shapefiletype]['shapefile']){
+						if (outputObject[shapefiletype]['shapefile'].hasOwnProperty(actualfile)){
+							saver.addData({
+								filename: shapefiletype+"_shapefile_from_jsapi_draw",
+								extension: actualfile,
+								datablob: outputObject[shapefiletype]['shapefile'][actualfile]
+							});
+						}
+					}
+				}
+			}
+		}
+		if (anythingToDo) {
+			document.getElementById("saveButtons").innerHTML = "Save results";
+			var div = document.createElement("div");
+			div.id = "saveButtonDiv";
+			document.getElementById("saveButtons").appendChild(div);
+			//saver.createSaveControl("saveButtonDiv", true);
+			var isAutoDownload = true;
+			var isDownloadZip = true;
+			saver.createSaveControlExtend("saveButtonDiv", true,isAutoDownload,isDownloadZip);
+		}
+		else {
+			document.getElementById("saveButtons").innerHTML = "No shapefiles created!";
+		}
+	  }
+	  
+      dojo.addOnLoad(init);
+    </script>
+  </head>
+  <body class="claro">
+    <button onclick="tb.activate(esri.toolbars.Draw.POINT);">Point</button>
+    <button onclick="tb.activate(esri.toolbars.Draw.POLYLINE);">Polyline</button>
+    <button onclick="tb.activate(esri.toolbars.Draw.FREEHAND_POLYLINE);">Freehand Polyline</button>
+ 	<button onclick="tb.activate(esri.toolbars.Draw.POLYGON);">Polygon</button>
+    <button onclick="tb.activate(esri.toolbars.Draw.FREEHAND_POLYGON);">Freehand Polygon</button>
+    <button onclick="exportShapefiles()">Export Shapefiles</button>
+	
+    <button onclick="tb.deactivate()">Deactivate</button>
+	
+
+    <div id="map" style="width:1024px; height:512px; border:2px solid #000;" class="claro"></div>
+	<br />
+    Zoom Slider :
+    <input type="button" value="Hide" onclick="map.hideZoomSlider()" />
+    <input type="button" value="Show" onclick="map.showZoomSlider()" />
+	<br/>
+	<div id="saveButtons">
+		<div id="saveButtonDiv"></div>
+	</div>
+  </body class="claro">
+</html>
