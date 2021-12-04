@@ -19,3 +19,5 @@ bH_Proto.createSaveControlExtend = function (locationDiv, append, isAutoDownload
 
 }
 ```
+
+> TODO : 保存中文字符 （save chinese character）
