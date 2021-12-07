@@ -191,6 +191,18 @@
                 copyright: '1sd'
             })
 
+            // 服务地址2
+            // var layer_vec2 = new WebTileLayer({
+            //     urlTemplate: "http://{subDomain}.tianditu.gov.cn/DataServer?T=vec_c&x={col}&y={row}&l={level}&tk=6b11303ae9c92e9963899d1e3122c59b",
+            //     subDomains: ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7'],
+            //     //subDomains: ['t0'],
+            //     tileInfo: tileInfo,
+            //     spatialReference: {
+            //         wkid: 4490
+            //     },
+            //     copyright: '1sd'
+            // })
+
             // var layer = WebTileLayer(
             //     "http://{subDomain}.tianditu.gov.cn/eia_c/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=eia&STYLE=default&TILEMATRIXSET=c&TILEMATRIX=${level}&TILEROW=${row}&TILECOL=${col}&FORMAT=tiles&tk=0dd7d7cd89b828227cf1e1176c2a42f5", {
             //         // subDomains: ['t0','t1','t2','t3','t4','t5','t6','t7'],
@@ -246,7 +258,6 @@
                 y: 28.12
             })
 
-            debugger
             // 创建地图，不设置底图，如果设置底图会造成坐标系无法被转换成 ESPG:4326 (WGS1984)
             var map = new Map({
                 spatialReference: {
