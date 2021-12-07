@@ -757,9 +757,11 @@ var Shapefile = (function(){
 									}
 									break;
 								case "string":
+									var strLen = _getStringRealLength(attvalue)
 									allAttributes[attribute] = {
 										type: "C",
-										length: attvalue.length
+										length: strLen
+										//length: attvalue.length
 									}
 									break;
 							}
@@ -786,6 +788,19 @@ var Shapefile = (function(){
 			}
 		}
 		return attributeMap;
+	}
+	
+	// get real string length
+	var _getStringRealLength = function(str){
+		var l = str.length;
+		var blen = 0;
+		for (i = 0; i < l; i++) {
+			if ((str.charCodeAt(i) & 0xff00) != 0) {
+				blen++;
+			}
+			blen++;
+		}
+		return blen;
 	}
 // DEFINE THE OBJECT THAT WILL REPRESENT THE PROTOTYPE
 	// all functions defined, now return as the prototype an object giving access to the ones we want
