@@ -1,8 +1,19 @@
+<!--
+ * @Description:
+ * @version:
+ * @Author: wangzhaorui
+ * @Date: 2021-12-04 12:11:55
+ * @LastEditors: wangzhaorui
+ * @LastEditTime: 2022-02-10 22:54:41
+-->
+
 # Tools
 
-- sys-playground update 20220210 离线版 arcgis api 符号练兵场 (offline arcgis api for js) 4.7 symbols for playground
+- sys-playground update 2022/02/10
 
-- js2shapeFile update 20211204
+> 离线版 arcgis api 符号练兵场 (offline arcgis api for js) 4.7 symbols for playground
+
+- js2shapeFile update 2021/12/04
 
 > 原地址（source url）：https://github.com/borisdev/js2shapefile
 
