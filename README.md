@@ -1,5 +1,7 @@
 # Tools
 
+- sys-playground update 20220210 离线版 arcgis api 符号练兵场 (offline arcgis api for js) 4.7 symbols for playground
+
 - js2shapeFile update 20211204
 
 > 原地址（source url）：https://github.com/borisdev/js2shapefile
